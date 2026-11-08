@@ -2,7 +2,10 @@
 
 This fork adds a Docker runner for Linux and a self-hosted Convex backend.
 The native macOS application and Mac-only tools are not included. Self-hosting
-does not support Threadbear's hosted iPhone push relay.
+does not support Threadbear's hosted iPhone push relay. Native self-hosted pairing needs an
+iPhone build newer than 1.0.4 (see `docs/self-hosting.md`); older clients reject
+the tailnet origin before contacting the backend. The enrollment template makes
+browser use primary and gates native pairing by that requirement.
 
 `Dockerfile` pins the Node base and installs locked dependencies without package
 lifecycle scripts. `Dockerfile.convex` changes only executable permissions on

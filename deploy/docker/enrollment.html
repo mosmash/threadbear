@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Threadbear setup</title>
+<style>
+:root{color-scheme:dark;font:16px system-ui;background:#111318;color:#e9e9ee}
+body{max-width:480px;margin:40px auto;padding:20px}h1{font-size:28px}
+p{color:#aeb5c5;line-height:1.6}a.action{display:block;padding:15px 18px;border-radius:12px;background:#344ec7;color:white;text-decoration:none;text-align:center;margin:12px 0;font-weight:650}
+img{display:block;background:white;width:min(100%,300px);margin:24px auto;border-radius:12px}
+small{color:#aeb5c5}section{padding:20px;background:#1c2028;border:1px solid #303644;border-radius:18px}
+details{border-top:1px solid #303644;margin-top:24px;padding-top:18px}summary{cursor:pointer;font-weight:650;line-height:1.5}
+</style>
+<section>
+  <h1>Threadbear</h1>
+  <p>Open this page in Safari, then use the browser app.</p>
+  <a class="action" href="{{BROWSER_URL}}">Open browser app</a>
+  <p>The iPhone app versions 1.0.4 and earlier reject self-hosted servers. Use the browser until you have a newer build with self-hosting support. You can add the browser app to your Home Screen from Safari.</p>
+  <details>
+    <summary>Pair a newer iPhone build</summary>
+    <p>Only for a build that supports self-hosted servers. The setup-page address itself is not a pairing link.</p>
+    <a class="action" href="{{PHONE_URL}}">Pair supported iPhone app</a>
+    <img src="/setup/phone.svg" alt="Private iPhone pairing QR">
+    <p>Scan from the supported app, or tap the pairing button on this phone.</p>
+  </details>
+  <small>Invitations expire {{EXPIRES}}. Keep this page private and Tailscale connected. Native push notifications are unavailable with self-hosting.</small>
+</section>
+</html>
