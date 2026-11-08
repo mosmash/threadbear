@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+export ANTHROPIC_AUTH_TOKEN="$(cat /run/secrets/model-token)"
+exec "/opt/threadbear/runner/node_modules/@anthropic-ai/claude-agent-sdk-linux-$(node -p process.arch)/claude" "$@"

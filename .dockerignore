@@ -1,0 +1,14 @@
+**
+!package.json
+!package-lock.json
+!convex.json
+!convex/**
+!relay/convex/**
+!web/**
+!runner/**
+!deploy/docker/**
+**/node_modules
+**/.env*
+**/secrets
+**/dist
+**/.git

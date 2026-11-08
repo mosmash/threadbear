@@ -1,0 +1,4 @@
+FROM ghcr.io/convex/convex-backend@sha256:e9c084e8bd6c1f249012c672193f0988c748824f55a24cdad45f6185a8462f9a
+# Upstream gives these executable files owner-only execute permission.
+RUN find /convex -maxdepth 1 -type f -perm /100 -exec chmod a+rx {} +
+USER 1000:1000

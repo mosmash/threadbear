@@ -8,7 +8,7 @@ import { RELEASE } from './release.ts';
 import { gatewayBase, gatewayUrlFrom } from './connectors.ts';
 import { credentialUrlProblem } from './secure-url.ts';
 import { findGatewayClient } from './notion-tasks.ts';
-import { CLI_POLICIES, isEffortLevel, isProvider, type CliPolicy, type EffortLevel, type Provider } from './protocol.ts';
+import { CLI_POLICIES, isEffortLevel, isPermissionMode, isProvider, type CliPolicy, type EffortLevel, type PermissionMode, type Provider } from './protocol.ts';
 
 // <package version>+<release id>, or +source when run from a checkout.
 export const RUNNER_VERSION = RELEASE.version;
@@ -60,6 +60,7 @@ export type Config = {
   // model); unset means the account's own default or the model's own level.
   defaults: {
     cwd: string;
+    permissionMode?: PermissionMode;
     accountId?: string;
     poolId?: string;
     model?: string;
@@ -134,6 +135,7 @@ export type RunnerJson = {
   port?: number;
   defaults?: {
     cwd?: string;
+    permissionMode?: PermissionMode;
     accountId?: string;
     // New threads start on accountId (the last one used) as it is, rather
     // than on the account with the most room. A dev runner sets it so its
@@ -249,7 +251,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   return {
     home,
     port,
-    host: '127.0.0.1',
+    host: env.THREADBEAR_BIND === '0.0.0.0' ? '0.0.0.0' : '127.0.0.1',
     maxLive: Number.isFinite(maxLive) && maxLive >= 1 ? Math.floor(maxLive) : DEFAULT_MAX_LIVE,
     logFile: expandHome(env.THREADBEAR_LOG || path.join(os.homedir(), 'Library', 'Logs', 'threadbear-runner.log')),
     claudePath: expandHome(env.THREADBEAR_CLAUDE_PATH || json.claudePath || '~/.local/bin/claude'),
@@ -257,6 +259,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     defaults: {
       cwd: expandHome(json.defaults?.cwd || DEFAULT_CWD),
       accountId: json.defaults?.accountId,
+      ...(isPermissionMode(json.defaults?.permissionMode) ? { permissionMode: json.defaults.permissionMode } : {}),
       ...(nonEmpty(json.defaults?.poolId) ? { poolId: nonEmpty(json.defaults?.poolId) } : {}),
       model: nonEmpty(json.defaults?.model),
       ...(models ? { models } : {}),

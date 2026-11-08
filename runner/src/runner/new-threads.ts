@@ -205,7 +205,7 @@ export const newThreadsPart = {
       accountId,
       ...(poolId ? { poolId } : {}),
       provider: account.provider,
-      permissionMode: params.permissionMode ?? 'full',
+      permissionMode: params.permissionMode ?? this.cfg.defaults.permissionMode ?? 'full',
       ...(sandboxed ? { confined: true as const } : {}),
       status: 'idle',
       createdAt: now,

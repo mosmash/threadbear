@@ -1,0 +1,46 @@
+services:
+  convex:
+    image: monash/threadbear-convex:d1fcbeaf-nonroot
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile.convex}
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 1536m
+    cpus: 2
+    pids_limit: 128
+    ports: ["127.0.0.1:13210:3210"]
+    environment:
+      CONVEX_CLOUD_ORIGIN: ${THREADBEAR_API_ORIGIN:?}
+      CONVEX_SITE_ORIGIN: ${THREADBEAR_SITE_ORIGIN:?}
+      DISABLE_BEACON: "true"
+    volumes:
+      - ${THREADBEAR_DATA:?}/convex:/convex/data
+    tmpfs: ["/tmp:size=128m,mode=1777"]
+    extra_hosts: ["${THREADBEAR_HOSTNAME:?}:${THREADBEAR_TAILNET_IP:?}"]
+    networks: [trial]
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "3"}
+  site-edge:
+    image: monash/threadbear-site-edge:trial-v1
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile, target: site-edge}
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 64m
+    cpus: 0.25
+    pids_limit: 32
+    ports: ["127.0.0.1:13211:8080"]
+    volumes:
+      - ${THREADBEAR_DATA:?}/private/enrollment-auth.json:/run/secrets/enrollment-auth:ro
+      - ${THREADBEAR_DATA:?}/private/enrollment:/enrollment:ro
+    networks: [trial]
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "3"}
