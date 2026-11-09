@@ -49,3 +49,22 @@ The deployment container is temporary. Use it to typecheck, deploy functions,
 build the web client and upload static files with the new backend's admin key.
 Do not add that key to the runner. Host-specific operational notes, backup
 procedures, credentials and receipts belong outside this repository.
+
+## Optional Convex Cloud backend
+
+Use `compose.yaml` with `compose.cloud.yaml` instead of the self-hosted variant.
+The runner remains isolated in Docker. Provision the Cloud project from a
+separate disposable deployment worker, use native snapshot export/import for
+an existing trial, and publish the web client with its Cloud URL. Set
+`sync.url` and `sync.site` in the private runner configuration. Keep account and
+deployment credentials outside the runner; it needs only its application key.
+Never start both backends' writers against copied state.
+
+The Cloud variant adds `THREADBEAR_CLOUD_SITE_ORIGIN` to the private Compose
+environment. The setup service retains authenticated `/setup/` files and
+redirects other GET/HEAD requests to that fixed HTTPS `.convex.site` origin.
+It does not forward uploads or arbitrary destinations. Use
+`enrollment-cloud.html` for Cloud pairing; the released iPhone client accepts
+Cloud origins. Actual device pairing and push delivery need device validation.
+With immutable dependency directories, build the website using
+`npm run web:build -- --configLoader native` to avoid a Vite cache write.

@@ -1,0 +1,9 @@
+# Use with compose.yaml; the stopped self-hosted backend is a rollback checkpoint.
+services:
+  site-edge:
+    extends:
+      file: compose.selfhosted.yaml
+      service: site-edge
+    image: monash/threadbear-site-edge:trial-cloud-v1
+    environment:
+      THREADBEAR_CLOUD_SITE_ORIGIN: ${THREADBEAR_CLOUD_SITE_ORIGIN:?}

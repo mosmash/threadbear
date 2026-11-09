@@ -1,6 +1,14 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
+// Only the configured Convex Cloud site is a redirect destination.
+const cloudSite = process.env.THREADBEAR_CLOUD_SITE_ORIGIN;
+let cloudOrigin;
+if (cloudSite) {
+  const u = new URL(cloudSite);
+  if (u.protocol !== 'https:' || !/^[a-z0-9-]+(?:\.[a-z0-9-]+)?\.convex\.site$/.test(u.hostname) || u.username || u.password || u.port || u.pathname !== '/' || u.search || u.hash) throw new Error('Invalid Convex Cloud site origin');
+  cloudOrigin = u.origin;
+}
 const secret = JSON.parse(fs.readFileSync('/run/secrets/enrollment-auth','utf8'));
 const expected = crypto.createHash('sha256').update(secret.username+':'+secret.password).digest();
 function authorized(req) {
@@ -23,6 +31,12 @@ http.createServer((req,res)=>{
       if(error){res.writeHead(503,{'content-type':'text/plain'});res.end('Enrollment is being prepared.');return;}
       res.writeHead(200,{'content-type':file.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8'});res.end(req.method==='HEAD'?undefined:data);
     });return;
+  }
+  if (cloudOrigin) {
+    res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');
+    if (!['GET','HEAD'].includes(req.method)) { res.writeHead(503);res.end('Trial moved to Convex Cloud; reconnect from the private setup page.');return; }
+    const query = new URL(req.url,'http://site').search;
+    res.writeHead(302,{'Location':cloudOrigin+path+query});res.end();return;
   }
   // Fixed backend only; no arbitrary destination, admin API, or request logging.
   const headers={...req.headers};delete headers.authorization;delete headers['proxy-authorization'];
