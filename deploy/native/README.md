@@ -21,7 +21,10 @@ lockfile from `../docker/codex/` into a private `native/runtime` snapshot. Put
 Node's distribution under its `runtime/node/` and this deployment code in
 `deploy/native/`. Artifact receipts must pin the source, binary versions and
 hashes. Extraction of the already audited runner image is a valid initial
-installation; subsequent execution and backup/restore require no image.
+installation; subsequent execution and backup/restore require no image. When
+extracting a distribution from an image, copy any referenced distribution tools
+and convert image-specific absolute executable aliases to valid relative links.
+Prove a fresh stopped restore before retiring the source image.
 The runner uses the SDK's pinned Claude executable, never a host OAuth login.
 Keep the eight-model filtered catalog and the provider policy in their owning
 files under `../docker/`; native deployment reuses those modules.

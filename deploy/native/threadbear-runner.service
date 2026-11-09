@@ -1,7 +1,7 @@
 [Unit]
 Description=Threadbear native runner
 After=network-online.target
-Requires=threadbear-model-relay.service
+Wants=threadbear-model-relay.service
 After=threadbear-model-relay.service
 StartLimitIntervalSec=120
 StartLimitBurst=10
