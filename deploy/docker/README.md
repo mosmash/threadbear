@@ -1,5 +1,9 @@
 # Isolated Linux trial
 
+For a Docker-free WSL/Linux installation with separate native user services,
+see [the native deployment](../native/README.md). Keep host-specific operational
+state and receipts outside the checkout.
+
 This fork adds a Docker runner for Linux and a self-hosted Convex backend.
 The native macOS application and Mac-only tools are not included. Self-hosting
 does not support Threadbear's hosted iPhone push relay. Native self-hosted pairing needs an

@@ -67,5 +67,6 @@ export function createModelRelay(config, {stateDir='/state', upstreamOrigin='htt
 
 if(process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
   const config = JSON.parse(fs.readFileSync('/run/secrets/relay-config', 'utf8'));
-  createModelRelay(config).listen(8080,'0.0.0.0');
+  createModelRelay(config, {upstreamOrigin: process.env.THREADBEAR_UPSTREAM_ORIGIN ?? 'http://cliproxyapi:8317'})
+    .listen(Number(process.env.THREADBEAR_RELAY_PORT ?? 8080), process.env.THREADBEAR_RELAY_BIND ?? '0.0.0.0');
 }

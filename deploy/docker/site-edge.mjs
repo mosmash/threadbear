@@ -46,4 +46,4 @@ http.createServer((req,res)=>{
   proxy.setTimeout(60000,()=>proxy.destroy());
   proxy.on('error',()=>{if(!res.headersSent)res.writeHead(502);res.end('Backend unavailable');});
   req.on('aborted',()=>proxy.destroy());res.on('close',()=>proxy.destroy());req.pipe(proxy);
-}).listen(8080,'0.0.0.0');
+}).listen(Number(process.env.THREADBEAR_SITE_PORT ?? 8080), process.env.THREADBEAR_SITE_BIND ?? '0.0.0.0');
