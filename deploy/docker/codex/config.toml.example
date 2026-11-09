@@ -1,0 +1,18 @@
+model = "gpt-6.1-sol"
+model_reasoning_effort = "medium"
+model_provider = "threadbear_relay"
+model_catalog_json = "/opt/threadbear/deploy/docker/codex/models.json"
+cli_auth_credentials_store = "file"
+check_for_update_on_startup = false
+web_search = "disabled"
+
+[analytics]
+enabled = false
+
+[model_providers.threadbear_relay]
+name = "Threadbear trial relay"
+base_url = "http://model-relay:8080/v1"
+env_key = "THREADBEAR_MODEL_TOKEN"
+wire_api = "responses"
+requires_openai_auth = false
+supports_websockets = false

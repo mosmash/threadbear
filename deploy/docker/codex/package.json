@@ -1,0 +1,5 @@
+{
+  "name": "threadbear-docker-codex",
+  "private": true,
+  "dependencies": { "@openai/codex": "0.167.0" }
+}

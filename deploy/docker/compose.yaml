@@ -12,7 +12,7 @@ x-runtime: &runtime
 services:
   runner:
     <<: *runtime
-    image: monash/threadbear:ba0e271-docker-trial
+    image: monash/threadbear:codex-trial-v1
     build: {context: ../.., dockerfile: deploy/docker/Dockerfile, target: runner}
     mem_limit: 2g
     cpus: 2
@@ -35,7 +35,7 @@ services:
       retries: 3
   model-relay:
     <<: *runtime
-    image: monash/threadbear-model-relay:trial-v1
+    image: monash/threadbear-model-relay:codex-trial-v1
     build: {context: ../.., dockerfile: deploy/docker/Dockerfile, target: relay}
     mem_limit: 128m
     cpus: 0.5

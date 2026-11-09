@@ -27,11 +27,20 @@ This trial sets `ask`, but an explicit client choice still wins. The optional
 `THREADBEAR_BIND=0.0.0.0` enables container networking; the default remains
 loopback. Keep the host-published RPC port on loopback.
 
-The model relay grants only selected Claude message/model endpoints, with a
+The model relay grants selected Claude message and Codex Responses endpoints, with a
 separate random app token, a model allowlist, two concurrent requests, 200
 requests per UTC day and a 16,384-token output limit. Its upstream client key
 stays outside the agent container. It assumes an existing Docker model proxy;
 adapt that private dependency on another host. It never receives OAuth grants.
+
+The runner includes the locked official Codex CLI. Its native Threadbear adapter
+discovers a private Codex home with `auth.json`; use only the scoped trial relay
+key there, never a host login. `codex/config.toml.example` configures the same
+relay and a provider-matched model picker. `codex/SOURCE.md` owns the catalog
+provenance. Claude and Codex share the request/concurrency/output caps. Keep the
+native `ask` and explicit permission-mode behavior; Docker does not require
+granting every Codex turn full access. Test the relay without a provider call
+using `node --test deploy/docker/model-relay.test.mjs`.
 
 `site-edge.mjs` forwards to the fixed Convex site and protects `/setup/` with
 independent Basic authentication. Its private enrollment files contain short
